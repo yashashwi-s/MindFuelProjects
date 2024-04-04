@@ -1,0 +1,54 @@
+/* styles.css */
+
+/* Navbar styles */
+.navbar {
+    background-color: #f8f9fa; /* Change the background color as needed */
+    padding: 10px; /* Add padding for spacing */
+}
+
+.navbar-brand {
+    color: #212529; /* Change the color of the brand name */
+    font-family: 'Poppins', sans-serif; /* Use Google Font 'Poppins' */
+    font-size: 1.5rem; /* Adjust font size */
+}
+
+.navbar-nav .nav-link {
+    color: #212529; /* Change the color of the navigation links */
+    font-family: 'Roboto', sans-serif; /* Use Google Font 'Roboto' */
+}
+
+.navbar-nav .nav-link:hover {
+    color: #007bff; /* Change the hover color of the navigation links */
+}
+
+/* Logo styles */
+.logo-title {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+}
+
+.logo {
+    margin-right: 10px; /* Adjust spacing between logo and text */
+}
+
+/* Toggle button styles */
+.navbar-toggler {
+    border: none;
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(0, 0, 0, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* Add spacing between navbar elements */
+.nav-item {
+    margin-right: 20px; /* Adjust spacing between navbar items */
+}
+
+/* Adjustments for larger screens */
+@media (min-width: 768px) {
+    .navbar-nav {
+        margin-left: auto; /* Align navigation links to the right on larger screens */
+    }
+}
