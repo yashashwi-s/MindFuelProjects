@@ -219,7 +219,7 @@ app.get("/client", function(req,res){
 });
 
 app.get("/sendEmail", function(req, res){
-    res.render("sendEmail");
+    res.render("sendEmail", {t:t});
 });
 
 app.post("")
