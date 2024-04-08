@@ -66,7 +66,6 @@ app.get("/", function(req, res) {
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
-        lowercase: true,
         required: [true, "can't be blank"]
      },
     mobno: {
@@ -79,7 +78,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         lowercase: true,
         required: [true, "can't be blank"],
-        match: [/^[a-zA-Z0-9]+$/, 'is invalid'],
         index: true,
         unique: true
      },
@@ -90,6 +88,17 @@ const userSchema = new mongoose.Schema({
         match: [/\S+@\S+\.\S+/, 'is invalid'],
         index: true
      },
+     gender: String,
+     school: String,
+     course: String,
+     degree: String,
+     passout: Number,
+     currentYear: Number,
+     linkedProfile: String,
+     github: String,
+     skills: [String],
+     pastProjects: [String],
+     country: String,
      password: {
         type: String,
         required: [true, 'Password is required'],
@@ -116,7 +125,7 @@ app.get("/login",function(req,res)
 
 if (t===0)
 {app.post("/signup", async function (req, res) {
-    const { name, mobno, username, email, password, confirmPassword } = req.body;
+    const { name, mobno, username, email, gender, school, course, degree, passout, currentYear, linkedProfile, github, skills, pastProjects, password, confirmPassword } = req.body;
   
     // Check if passwords match
     if (password !== confirmPassword) {
@@ -126,7 +135,8 @@ if (t===0)
             name,
             mobno,
             username,
-            email
+            email,
+            gender, school, course, degree, passout, currentYear, linkedProfile, github, skills, pastProjects
         });
     }
     
@@ -140,7 +150,8 @@ if (t===0)
             mobno,
             username,
             email,
-            password: hashedPassword,
+            gender, school, course, degree, passout, currentYear, linkedProfile, github, skills, pastProjects,
+            password: hashedPassword
         });
     
         // Save the user to the database
@@ -198,12 +209,19 @@ if(t===1){
 }
 
 app.get("/profile", function(req, res){
-    res.render("profile", {t: t, user: user});
+    if(t===1)
+    {res.render("profile", {t: t, user: user});}
+    else{res.redirect("/signup")};
 });
 
 app.get("/client", function(req,res){
     res.render("client", { t: t });
 });
+
+app.get("/sendEmail", function(req, res){
+    res.render("sendEmail");
+});
+
 app.post("")
 app.listen(3000,function()
 {
