@@ -302,3 +302,41 @@ p {
 #email-bt:hover{
     background-color: #e2dbdb;
 }
+
+/* Add this CSS to your existing stylesheet or create a new one */
+
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.student-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.student-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.student-card h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.student-card p {
+    margin: 5px 0;
+}
+
+.student-card strong {
+    font-weight: bold;
+}
+
+/* Adjust styling as needed */

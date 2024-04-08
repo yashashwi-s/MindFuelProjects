@@ -57,12 +57,6 @@ db.once('open', function() {
 });
 
 module.exports = db;
-
-app.get("/", function(req, res) {
-    res.render("home", { t: t });
-});
-
-
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -109,9 +103,21 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", userSchema);
 
-app.post("/",function(req,res){
-    res.render("home");
+app.get("/", function(req, res) {
+    res.render("home", { t: t });
 });
+
+app.get("/home", function(req, res){
+    res.render("home", {t:t});
+});
+
+app.post("/",function(req,res){
+    res.render("home", {t:t});
+});
+
+app.post("/#", function(req,res){
+    res.render("home", {t:t});
+})
 
 app.get("/signup",function(req,res)
 {
@@ -222,8 +228,14 @@ app.get("/sendEmail", function(req, res){
     res.render("sendEmail", {t:t});
 });
 
-app.get("/student", function(req, res){
-    res.render("student");
+app.get("/student", async function(req, res){
+    try {
+        const users = await User.find({});
+        res.render("student", { t: t, users: users });
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
 });
 
 app.post("")
