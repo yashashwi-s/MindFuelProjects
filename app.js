@@ -222,6 +222,10 @@ app.get("/sendEmail", function(req, res){
     res.render("sendEmail", {t:t});
 });
 
+app.get("/student", function(req, res){
+    res.render("student");
+});
+
 app.post("")
 app.listen(3000,function()
 {
