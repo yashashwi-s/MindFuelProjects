@@ -105,6 +105,60 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", userSchema);
 
+const clientSchema = new mongoose.Schema({
+    organization: {
+        type: String,
+        required: true
+    },
+    contact: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true
+    },
+    website: {
+        type: String,
+        required: true
+    },
+    industry: {
+        type: String,
+        required: true
+    },
+    projectdetails: {
+        type: String,
+        required: true
+    },
+    projectduration: {
+        type: String,
+        required: true
+    },
+    skills: {
+        type: [String],
+        required: true
+    },
+    outcome: {
+        type: String,
+        required: true
+    },
+    budget: {
+        type: String,
+        required: true
+    },
+    timeline: {
+        type: String,
+        required: true
+    },
+    comments: {
+        type: String,
+        required: true
+    }
+});
+
+
+const Client = mongoose.model("Client", clientSchema);
+
 app.get("/", function (req, res) {
   res.render("home", { t: t });
 });
@@ -259,6 +313,56 @@ app.get("/client", function (req, res) {
   res.render("client", { t: t });
 });
 
+if (t === 0) {
+    app.post("/client", async function (req, res) {
+      const {
+        organization,
+        contact,
+        email,
+        website,
+        industry,
+        porjectdetails,
+        projectduration,
+        skills,
+        outcome,
+        budget,
+        timeline,
+        comments
+      } = req.body;
+  
+      // Check if passwords match
+      
+  
+      try {
+        
+  
+        // Create a new user instance
+        const newClient = new Client({
+            organization,
+            contact,
+            email,
+            website,
+            industry,
+            porjectdetails,
+            projectduration,
+            skills,
+            outcome,
+            budget,
+            timeline,
+            comments
+        });
+  
+        // Save the user to the database
+        await newClient.save();
+  
+        res.redirect("/projects"); // Redirect to login page after signup
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Failed to create project" });
+      }
+    });}
+else {app.post("profile", function(req, res){})}
+
 app.get("/sendEmail", function (req, res) {
   res.render("sendEmail", { t: t });
 });
@@ -273,7 +377,11 @@ app.get("/student", async function (req, res) {
   }
 });
 
-app.post("");
+app.get("/chat/:userId", function(req, res) {
+    const userId = req.params.userId;
+    res.render("chatRoom", { t:t, userId: userId });
+});
+
 app.listen(3000, function () {
   console.log("Server Started on port on 3000");
 });
