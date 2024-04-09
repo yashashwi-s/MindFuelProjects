@@ -339,4 +339,27 @@ p {
     font-weight: bold;
 }
 
-/* Adjust styling as needed */
+
+
+.button-container {
+    text-align: center; /* Center the button horizontally */
+}
+
+.contact-button {
+    background-color: #007bff; /* Change button color to blue */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.contact-button:hover {
+    background-color: #0056b3; /* Darker shade of blue on hover */
+}
+
+
