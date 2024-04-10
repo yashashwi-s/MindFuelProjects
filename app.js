@@ -107,55 +107,41 @@ const User = mongoose.model("User", userSchema);
 
 const clientSchema = new mongoose.Schema({
     organization: {
-        type: String,
-        required: true
+        type: String
     },
     contact: {
-        type: String,
-        required: true
-    },
+        type: String    },
     email: {
-        type: String,
-        required: true
+        type: String
     },
     website: {
-        type: String,
-        required: true
+        type: String
     },
     industry: {
-        type: String,
-        required: true
+        type: String
     },
     projectdetails: {
-        type: String,
-        required: true
+        type: String
     },
     projectduration: {
-        type: String,
-        required: true
+        type: String
     },
     skills: {
-        type: [String],
-        required: true
+        type: String
     },
     outcome: {
-        type: String,
-        required: true
+        type: String
     },
     budget: {
-        type: String,
-        required: true
+        type: String
     },
     timeline: {
-        type: String,
-        required: true
+        type: String
     },
     comments: {
-        type: String,
-        required: true
+        type: String
     }
 });
-
 
 const Client = mongoose.model("Client", clientSchema);
 
@@ -260,6 +246,8 @@ if (t === 0) {
   });
 }
 
+
+
 var user;
 
 app.post("/login", async function (req, res) {
@@ -315,54 +303,51 @@ app.get("/client", function (req, res) {
 
 if (t === 0) {
     app.post("/client", async function (req, res) {
-      const {
-        organization,
-        contact,
-        email,
-        website,
-        industry,
-        porjectdetails,
-        projectduration,
-        skills,
-        outcome,
-        budget,
-        timeline,
-        comments
-      } = req.body;
-  
-      // Check if passwords match
-      
-  
-      try {
-        
-  
-        // Create a new user instance
-        const newClient = new Client({
+        const {
             organization,
             contact,
             email,
             website,
             industry,
-            porjectdetails,
+            projectdetails,
             projectduration,
             skills,
             outcome,
             budget,
             timeline,
             comments
-        });
-  
-        // Save the user to the database
-        await newClient.save();
-  
-        res.redirect("/projects"); // Redirect to login page after signup
-      } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Failed to create project" });
-      }
+        } = req.body;
+    
+        try {
+            const projectdetails = req.body.projectdetails.join(', ');
+            const newClient = new Client({
+                organization,
+                contact,
+                email,
+                website,
+                industry,
+                projectdetails,
+                projectduration,
+                skills,
+                outcome,
+                budget,
+                timeline,
+                comments
+            });
+    
+            await newClient.save();
+    
+            res.redirect("/projects"); 
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: "Failed to create client" });
+        }
     });}
 else {app.post("profile", function(req, res){})}
-
+app.get("/projects", async function(req,res){
+    const clients = await Client.find({});
+    res.render("projects", {t:t, clients: clients})
+})
 app.get("/sendEmail", function (req, res) {
   res.render("sendEmail", { t: t });
 });
