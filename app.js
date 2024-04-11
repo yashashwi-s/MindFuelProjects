@@ -10,8 +10,13 @@ const MongoStore = require("connect-mongo");
 const mongoose = require("mongoose");
 
 const router = express.Router();
+const Project = require("./models/Project");
+const Student = require("./models/Student");
+const Client = require("./models/Client");
+const Application = require("./models/Application");
 
 var t = 0;
+let user;
 app.use(express.json());
 
 mongoose.connect(
@@ -59,91 +64,15 @@ db.once("open", function () {
 });
 
 module.exports = db;
-const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, "can't be blank"],
-  },
-  mobno: {
-    type: Number,
-    match: /^\d{10}$/, // This regex matches exactly 10 digits
-    required: [true, "Mobile number is required"],
-    unique: true,
-  },
-  username: {
-    type: String,
-    lowercase: true,
-    required: [true, "can't be blank"],
-    index: true,
-    unique: true,
-  },
-  email: {
-    type: String,
-    lowercase: true,
-    required: [true, "can't be blank"],
-    match: [/\S+@\S+\.\S+/, "is invalid"],
-    index: true,
-  },
-  gender: String,
-  school: String,
-  course: String,
-  degree: String,
-  passout: Number,
-  currentYear: Number,
-  linkedProfile: String,
-  github: String,
-  skills: [String],
-  pastProjects: [String],
-  country: String,
-  password: {
-    type: String,
-    required: [true, "Password is required"],
-    minlength: [6, "Password must be at least 6 characters long"],
-  },
-  confirmPassword: String,
+
+app.use(function(req, res, next) {
+  if (req.session.userId) {
+    t = 1;
+  } else {
+    t = 0;
+  }
+  next();
 });
-
-const User = mongoose.model("User", userSchema);
-
-const clientSchema = new mongoose.Schema({
-    organization: {
-        type: String
-    },
-    contact: {
-        type: String    },
-    email: {
-        type: String
-    },
-    website: {
-        type: String
-    },
-    industry: {
-        type: String
-    },
-    projectdetails: {
-        type: String
-    },
-    projectduration: {
-        type: String
-    },
-    skills: {
-        type: String
-    },
-    outcome: {
-        type: String
-    },
-    budget: {
-        type: String
-    },
-    timeline: {
-        type: String
-    },
-    comments: {
-        type: String
-    }
-});
-
-const Client = mongoose.model("Client", clientSchema);
 
 app.get("/", function (req, res) {
   res.render("home", { t: t });
@@ -169,7 +98,48 @@ app.get("/login", function (req, res) {
   res.render("login", { t: t });
 });
 
+app.post("/applyToProject", async (req, res) => {
+  try {
+    const { projectID, studentID, description } = req.body;
+    const application = new Application({
+      project: projectID,
+      student: studentID,
+      description,
+      status: "pending",
+    });
+    await application.save();
+    res.status(201).json({ message: "Application submitted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to submit application" });
+  }
+});
+
+app.post("/addProject", async (req, res) => {
+  try {
+    const { companyID, projectDetails } = req.body;
+    const project = new Project({ company: companyID, ...projectDetails });
+    await project.save();
+    res.status(201).json({ message: "Project created successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to create project" });
+  }
+});
+
+app.get("/projectApplications/:projectID", async (req, res) => {
+  try {
+    const { projectID } = req.params;
+    const applications = await Application.find({ project: projectID }).populate("student");
+    res.render("projectApplications", { applications });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch project applications" });
+  }
+});
+
 if (t === 0) {
+  console.log(t);
   app.post("/signup", async function (req, res) {
     const {
       name,
@@ -189,10 +159,7 @@ if (t === 0) {
       password,
       confirmPassword,
     } = req.body;
-
-    // Check if passwords match
     if (password !== confirmPassword) {
-      // Pass input fields' values back to the view
       return res.render("signup", {
         error: "Passwords do not match",
         name,
@@ -213,11 +180,8 @@ if (t === 0) {
     }
 
     try {
-      // Hash the password
       const hashedPassword = await bcrypt.hash(password, 10);
-
-      // Create a new user instance
-      const newUser = new User({
+      const newStudent = new Student({
         name,
         mobno,
         username,
@@ -234,11 +198,9 @@ if (t === 0) {
         pastProjects,
         password: hashedPassword,
       });
+      await newStudent.save();
 
-      // Save the user to the database
-      await newUser.save();
-
-      res.redirect("/login"); // Redirect to login page after signup
+      res.redirect("/login"); 
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Failed to create user" });
@@ -246,36 +208,24 @@ if (t === 0) {
   });
 }
 
-
-
-var user;
-
 app.post("/login", async function (req, res) {
   const { loginUsername, loginPassword } = req.body;
 
   try {
-    // Find the user by username
-    user = await User.findOne({ username: loginUsername });
+    user = await Student.findOne({ username: loginUsername });
 
     console.log(user);
     console.log(loginUsername);
-    // Check if user exists
     if (!user) {
       console.log("User not found");
-      return res.render("login", { error: "Invalid username or password" });
-    }
-
-    // Compare the provided password with the hashed password stored in the database
+      return res.render("login", { error: "Invalid username or password" });}
     const isPasswordMatch = await bcrypt.compare(loginPassword, user.password);
 
     if (isPasswordMatch) {
-      // Passwords match, user authenticated successfully
-      // Redirect the user to a dashboard or another page upon successful login
-      t = 1;
-      console.log("User authenticated successfully");
+      req.session.userId = user._id;
+      req.app.locals.user = user;
       res.redirect("/");
     } else {
-      // Passwords do not match
       console.log("Invalid password");
       return res.render("login", { error: "Invalid username or password" });
     }
@@ -284,66 +234,54 @@ app.post("/login", async function (req, res) {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
-if (t === 1) {
-  app.post("/profile", async function (req, res) {});
-}
-
 app.get("/profile", function (req, res) {
-  if (t === 1) {
+  if (t === 1 && user) {
     res.render("profile", { t: t, user: user });
   } else {
     res.redirect("/signup");
   }
 });
-
-app.get("/client", function (req, res) {
-  res.render("client", { t: t });
-});
+// app.js
 
 if (t === 0) {
-    app.post("/client", async function (req, res) {
-        const {
-            organization,
-            contact,
-            email,
-            website,
-            industry,
-            projectdetails,
-            projectduration,
-            skills,
-            outcome,
-            budget,
-            timeline,
-            comments
-        } = req.body;
-    
-        try {
-            const projectdetails = req.body.projectdetails.join(', ');
-            const newClient = new Client({
-                organization,
-                contact,
-                email,
-                website,
-                industry,
-                projectdetails,
-                projectduration,
-                skills,
-                outcome,
-                budget,
-                timeline,
-                comments
-            });
-    
-            await newClient.save();
-    
-            res.redirect("/projects"); 
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ error: "Failed to create client" });
-        }
-    });}
-else {app.post("profile", function(req, res){})}
+  app.get("/client", function (req, res) {
+      res.render("client", { t: t, error: null });
+  });
+
+  app.post("/client", async function (req, res) {
+      const {
+          organization,
+          contact,
+          email,
+          website,
+          password,
+          confirmPassword
+      } = req.body;
+
+      try {
+          const hashedPassword = await bcrypt.hash(password, 10);
+
+          const newClient = new Client({
+              organization,
+              contact,
+              email,
+              website,
+              password: hashedPassword
+          });
+
+          await newClient.save();
+          res.redirect("/");
+      } catch (error) {
+          console.error(error);
+          res.status(500).json({ error: "Failed to create client" });
+      }
+  });
+} else {
+  app.get("/client", function(req, res){
+      res.redirect("\profile");
+  });
+}
+
 app.get("/projects", async function(req,res){
     const clients = await Client.find({});
     res.render("projects", {t:t, clients: clients})
@@ -354,7 +292,7 @@ app.get("/sendEmail", function (req, res) {
 
 app.get("/student", async function (req, res) {
   try {
-    const users = await User.find({});
+    const users = await Student.find({});
     res.render("student", { t: t, users: users });
   } catch (error) {
     console.error("Error fetching users:", error);

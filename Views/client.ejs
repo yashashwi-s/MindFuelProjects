@@ -3,12 +3,14 @@
 <div class="imagebg">
     <center>
         <h1 class="sign-up-heading">Start a Project</h1>
-        <!-- Social login icons -->
     </center>
     <div class="signup">
-        <!-- Project submission form -->
         <form class="sign-up-form" action="/client" method="post">
-            <!-- Organization details -->
+            <% if (error) { %>
+                <div class="alert alert-danger" role="alert">
+                    <%= error %>
+                </div>
+            <% } %>
             <div class="form-group mb-3">
                 <label for="organization" class="form-label">Organization</label>
                 <input type="text" class="form-control" id="organization" name="organization" required>
@@ -26,41 +28,13 @@
                 <input type="text" class="form-control" id="website" name="website">
             </div>
             <div class="form-group mb-3">
-                <label for="industry" class="form-label">Industry</label>
-                <input type="text" class="form-control" id="industry" name="industry">
-            </div>
-            <!-- Project details -->
-            <div class="form-group mb-3">
-                <label for="projectdetails" class="form-label">Project Details</label>
-                <textarea class="form-control" id="projectdetails" name="projectdetails" rows="3"></textarea>
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
             </div>
             <div class="form-group mb-3">
-                <label for="projectduration" class="form-label">Project Duration</label>
-                <input type="text" class="form-control" id="projectduration" name="projectduration">
+                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
             </div>
-            <div class="form-group mb-3">
-                <label for="skills" class="form-label">Skills Required</label>
-                <input type="text" class="form-control" id="skills" name="skills">
-            </div>
-            <!-- Outcome and budget -->
-            <div class="form-group mb-3">
-                <label for="outcome" class="form-label">Expected Outcome</label>
-                <textarea class="form-control" id="outcome" name="outcome" rows="3"></textarea>
-            </div>
-            <div class="form-group mb-3">
-                <label for="budget" class="form-label">Budget</label>
-                <input type="text" class="form-control" id="budget" name="budget">
-            </div>
-            <!-- Timeline and comments -->
-            <div class="form-group mb-3">
-                <label for="timeline" class="form-label">Detailed Timeline</label>
-                <textarea class="form-control" id="projectdetails" name="projectdetails" rows="3"></textarea>
-            </div>
-            <div class="form-group mb-3">
-                <label for="comments" class="form-label">Special Comments</label>
-                <textarea class="form-control" id="comments" name="comments" rows="3"></textarea>
-            </div>
-            <!-- Submit button -->
             <div class="d-grid gap-2">
                 <button type="submit" class="btn btn-success">Submit Project</button>
             </div>
