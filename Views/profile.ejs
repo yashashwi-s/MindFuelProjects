@@ -3,7 +3,7 @@
 <main>
   <div class="container">
     <h1>User Profile</h1>
-    <% if (user) { %>
+    <% if (t === 1 && user) { %>
     <div class="user-data">
       <p><strong>Name:</strong> <%= user.name %></p>
       <p><strong>Mobile Number:</strong> <%= user.mobno %></p>
@@ -28,9 +28,8 @@
       <% } %> <% if (user.pastProjects) { %>
       <p><strong>Past Projects:</strong> <%= user.pastProjects %></p>
       <% } %>
-      <!-- Add other user information you want to display -->
     </div>
-    <% } else { %>
+    <% }else { %>
     <p>No user data found.</p>
     <% } %>
   </div>

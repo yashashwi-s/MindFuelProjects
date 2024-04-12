@@ -15,8 +15,9 @@ const Student = require("./models/Student");
 const Client = require("./models/Client");
 const Application = require("./models/Application");
 
-var t=0;
 let user;
+let t;
+let client;
 app.use(express.json());
 
 mongoose.connect(
@@ -59,10 +60,21 @@ db.once("open", function () {
 module.exports = db;
 
 app.use(function(req, res, next) {
-  req.session.t = req.session.userId ? 1 : 0;
+  if(req.session.userId){
+    req.session.t=1;
+    client = null;
+  }
+  else if(req.session.client){
+    req.session.t=2;
+    client = req.session.client;
+  }
+  else{
+    req.session.t=0;
+    client = null;
+  }
+  t = req.session.t;
   next();
 });
-
 
 app.get("/", function (req, res) {
   res.render("home", { t: req.session.t });
@@ -105,17 +117,33 @@ app.post("/applyToProject", async (req, res) => {
   }
 });
 
+app.get("/addProject", function(req,res){
+  if(t===2 && client){
+    res.render("addProject", {t: req.session.t, client: req.session.client});
+  }
+  else{
+    res.redirect("/client");
+  }
+});
+
 app.post("/addProject", async (req, res) => {
   try {
-    const { companyID, projectDetails } = req.body;
-    const project = new Project({ company: companyID, ...projectDetails });
-    await project.save();
-    res.status(201).json({ message: "Project created successfully" });
+    console.log("Request Body:", req.body); 
+    const { industry, projectdetails, projectduration, skills, outcome, budget, timeline, comments } = req.body;
+    console.log("Received data:", { industry, projectdetails, projectduration, skills, outcome, budget, timeline, comments }); 
+    const project = new Project({
+      industry, projectdetails, projectduration, skills, outcome, budget, timeline, comments, company: req.session.client
+    }); 
+    console.log("New Project:", project); 
+    await project.save(); 
+    console.log("Project saved successfully");
+    res.redirect("/client");
   } catch (error) {
-    console.error(error);
+    console.error("Error creating project:", error); 
     res.status(500).json({ error: "Failed to create project" });
   }
 });
+
 
 app.get("/projectApplications/:projectID", async (req, res) => {
   try {
@@ -199,6 +227,7 @@ if (t === 0) {
 }
 
 app.post("/login", async function (req, res) {
+  
   const { loginUsername, loginPassword } = req.body;
 
   try {
@@ -235,11 +264,12 @@ app.get("/profile", function (req, res) {
   }
 });
 
+
 app.get("/client", function (req, res) {
-  if (req.session.t === 0) {
+  if (req.session.t === 0 || (req.session.t === 2 && !req.session.client)) {
     res.render("client", { t: req.session.t, error: null });
   } else {
-    res.redirect("/profile");
+    res.redirect("/profile1");
   }
 });
 
@@ -255,18 +285,19 @@ app.post("/client", async function (req, res) {
     } = req.body;
 
     try {
-      const hashedPassword = await bcrypt.hash(password, 10);
-
       const newClient = new Client({
         organization,
         contact,
         email,
         website,
-        password: hashedPassword
+        password
       });
 
       await newClient.save();
-      res.redirect("/");
+      req.session.client = newClient;
+      req.session.t=2;
+      console.log(req.session.t);
+      res.redirect("/profile1");
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Failed to create client" });
@@ -275,6 +306,22 @@ app.post("/client", async function (req, res) {
     res.redirect("/profile");
   }
 });
+
+app.get("/profile1", async function (req, res) {
+  try {
+    if (req.session.t === 2 && req.session.client) {
+      const client = req.session.client;
+      const projects = await Project.find({ company: client._id }).populate('company');
+      res.render("profile1", { t: req.session.t, client: client, projects: projects });
+    } else {
+      res.redirect("/client");
+    }
+  } catch (error) {
+    console.error("Error fetching client projects:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 
 
 app.get("/projects", async function(req,res){
