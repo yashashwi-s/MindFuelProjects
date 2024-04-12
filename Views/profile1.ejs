@@ -95,34 +95,21 @@
     <div class="container">
       <h1>Projects</h1>
       <div class="row">
-        <% for(let i = 0; i < projects.length; i+=2) { %>
-          <div class="col-md-6">
-            <% let project1 = projects[i]; %>
-            <div class="project">
-              <h3><%= project1.projectdetails %></h3>
-              <p><strong>Industry:</strong> <%= project1.industry %></p>
-              <p><strong>Project Duration:</strong> <%= project1.projectduration %></p>
-              <p><strong>Skills Required:</strong> <%= project1.skills %></p>
-              <p><strong>Expected Outcome:</strong> <%= project1.outcome %></p>
-              <p><strong>Budget:</strong> <%= project1.budget %></p>
-              <p><strong>Timeline:</strong> <%= project1.timeline %></p>
-              <p><strong>Comments:</strong> <%= project1.comments %></p>
-              <p><strong>Client:</strong> <%= project1.company.organization %></p>
-            </div>
-            <% if (i + 1 < projects.length) { %>
-              <% let project2 = projects[i + 1]; %>
-              <div class="project">
-                <h3><%= project2.projectdetails %></h3>
-                <p><strong>Industry:</strong> <%= project2.industry %></p>
-                <p><strong>Project Duration:</strong> <%= project2.projectduration %></p>
-                <p><strong>Skills Required:</strong> <%= project2.skills %></p>
-                <p><strong>Expected Outcome:</strong> <%= project2.outcome %></p>
-                <p><strong>Budget:</strong> <%= project2.budget %></p>
-                <p><strong>Timeline:</strong> <%= project2.timeline %></p>
-                <p><strong>Comments:</strong> <%= project2.comments %></p>
-                <p><strong>Client:</strong> <%= project2.company.organization %></p>
+        <% for (let i = 0; i < projects.length; i++) { %>
+          <div class="col-lg-6">
+            <div class="card mb-3">
+              <div class="card-body">
+                <h5 class="card-title"><%= projects[i].projectdetails %></h5>
+                <p class="card-text"><strong>Industry:</strong> <%= projects[i].industry %></p>
+                <p class="card-text"><strong>Project Duration:</strong> <%= projects[i].projectduration %></p>
+                <p class="card-text"><strong>Skills Required:</strong> <%= projects[i].skills %></p>
+                <p class="card-text"><strong>Expected Outcome:</strong> <%= projects[i].outcome %></p>
+                <p class="card-text"><strong>Budget:</strong> <%= projects[i].budget %></p>
+                <p class="card-text"><strong>Timeline:</strong> <%= projects[i].timeline %></p>
+                <p class="card-text"><strong>Comments:</strong> <%= projects[i].comments %></p>
+                <p class="card-text"><strong>Client:</strong> <%= projects[i].company.organization %></p>
               </div>
-            <% } %>
+            </div>
           </div>
         <% } %>
       </div>

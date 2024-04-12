@@ -311,7 +311,7 @@ app.get("/profile1", async function (req, res) {
   try {
     if (req.session.t === 2 && req.session.client) {
       const client = req.session.client;
-      const projects = await Project.find({ company: client._id }).populate('company');
+      const projects = await Project.find({ company: req.session.client});
       res.render("profile1", { t: req.session.t, client: client, projects: projects });
     } else {
       res.redirect("/client");
