@@ -200,20 +200,37 @@ app.post("/addProject", async (req, res) => {
   }
 });
 
-app.get("/projectApplications/:projectID", async (req, res) => {
+app.get("/applications/:projectID", async (req, res) => {
   try {
     const { projectID } = req.params;
     const applications = await Application.find({
       project: projectID,
     }).populate("student");
-    res.render("projectApplications", { applications });
+    res.render("applications", { applications, t:req.session.t });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to fetch project applications" });
   }
 });
 
-if (t === 0) {
+app.get("/applicants/:projectId/:studentId", async (req, res) => {
+  try {
+    const { studentId } = req.params;
+    const student = await Student.findById(studentId);
+    if (!student) {
+      return res.status(404).send("Student not found");
+    }
+
+    const applications = await Application.find({ student: studentId });
+    
+    res.render("applicants", { student, applications, t: req.session.t });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch applicant details" });
+  }
+});
+
+
   app.post("/signup", async function (req, res) {
     const {
       name,
@@ -280,7 +297,7 @@ if (t === 0) {
       res.status(500).json({ error: "Failed to create user" });
     }
   });
-}
+
 
 const getClientOrganization = (client) => {
   if (client) {

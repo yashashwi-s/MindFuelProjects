@@ -107,18 +107,22 @@
                 <p class="card-text"><strong>Budget:</strong> <%= projects[i].budget %></p>
                 <p class="card-text"><strong>Timeline:</strong> <%= projects[i].timeline %></p>
                 <p class="card-text"><strong>Comments:</strong> <%= projects[i].comments %></p>
+                <!-- Button for Applications -->
+                <a href="/applications/<%= projects[i]._id %>" class="btn btn-primary">Applications</a>
               </div>
             </div>
           </div>
         <% } %>
       </div>
     </div>
+    
 
     <div class="container text-center mt-5">
       <a href="/addProject" class="btn-add-project">
           <i class="fa-solid fa-plus"></i> Add Project
       </a>
   </div>
+
     <div class="footer-padding"></div>
     <hr style="border-style: solid none none; width: 90%; text-align: center; margin: auto; margin-top: 2%; height: 0px; border-color: black; border-width: 2px; color: black;">
     <div class="footer container-fluid">
