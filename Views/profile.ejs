@@ -29,9 +29,31 @@
       <p><strong>Past Projects:</strong> <%= user.pastProjects %></p>
       <% } %>
     </div>
-    <% }else { %>
+    <% } %> <!-- Close user-data div -->
+
+    <% if (appliedProjects) { %>
+    <div class="applied-projects">
+      <h2>Applied Projects</h2>
+      <% appliedProjects.forEach(project => { %>
+      <div class="project-card">
+        <h3><%= project.organization %></h3>
+        <p><strong>Industry:</strong> <%= project.industry %></p>
+        <p><strong>Project Duration:</strong> <%= project.projectduration %></p>
+        <p><strong>Skills Required:</strong> <%= project.skills %></p>
+        <p><strong>Expected Outcome:</strong> <%= project.outcome %></p>
+        <p><strong>Budget:</strong> <%= project.budget %></p>
+        <p><strong>Timeline:</strong> <%= project.timeline %></p>
+        <p><strong>Comments:</strong> <%= project.comments %></p>
+      </div>
+      <% }) %> <!-- Close appliedProjects.forEach -->
+    </div>
+    <% } else { %>
+    <p>No applied projects found.</p>
+    <% } %> <!-- Close appliedProjects condition -->
+
+    <% if (!user && !appliedProjects) { %>
     <p>No user data found.</p>
-    <% } %>
+    <% } %> <!-- Close user and appliedProjects absence condition -->
   </div>
 </main>
 

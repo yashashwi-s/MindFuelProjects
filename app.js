@@ -18,6 +18,8 @@ const Application = require("./models/Application");
 let user;
 let t;
 let client;
+let stid;
+let pid;
 app.use(express.json());
 
 mongoose.connect(
@@ -61,6 +63,7 @@ module.exports = db;
 
 app.use(function (req, res, next) {
   if (req.session.userId) {
+    stid = req.session.userId;
     req.session.t = 1;
     client = null;
   } else if (req.session.client) {
@@ -98,26 +101,49 @@ app.get("/login", function (req, res) {
   res.render("login", { t: req.session.t });
 });
 
-app.get("/apply", function (req, res) {
-  res.render("apply", { t: req.session.t });
+app.get("/apply/:projectID", async function (req, res) {
+  try {
+    const projectID = req.params.projectID;
+    const project = await Project.findById(projectID);
+    if (!project) {
+      return res.status(404).send("Project not found");
+    }
+    res.render("apply", { project, t: req.session.t });
+  } catch (error) {
+    console.error("Error fetching project details:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
-app.post("/applyToProject", async (req, res) => {
+
+app.post("/apply/:projectID", async (req, res) => {
   try {
-    const { projectID, studentID, description } = req.body;
+    const { projectID } = req.params;
+    const { coverLetter } = req.body;
+    pid=projectID;
+    
+    const project = await Project.findById(projectID);
+    if (!project) {
+      return res.status(404).json({ error: "Project not found" });
+    }
+    
     const application = new Application({
       project: projectID,
-      student: studentID,
-      description,
+      student: stid,
+      coverLetter: coverLetter,
       status: "pending",
     });
+
     await application.save();
+    
     res.status(201).json({ message: "Application submitted successfully" });
   } catch (error) {
-    console.error(error);
+    console.error("Error submitting application:", error);
     res.status(500).json({ error: "Failed to submit application" });
   }
 });
+
+
 
 app.get("/addProject", function (req, res) {
   if (t === 2 && client) {
@@ -295,13 +321,38 @@ app.post("/login", async function (req, res) {
   }
 });
 
-app.get("/profile", function (req, res) {
-  if (req.session.t === 1 && req.session.user) {
-    res.render("profile", { t: req.session.t, user: user });
-  } else {
-    res.redirect("/signup");
+app.get("/profile", async function (req, res) {
+  try {
+    if (req.session.t === 1 && req.session.user) {
+      const user = req.session.user;
+      const application = await Application.findOne({ student: user._id }).populate('project');
+      
+      if (application && application.project) {
+        let appliedProjects = [];
+        if (Array.isArray(application.project)) {
+          appliedProjects = application.project.map(project => project.toObject());
+        } else {
+          appliedProjects.push(application.project.toObject());
+        }
+        console.log('Applied Projects:', appliedProjects);
+        res.render("profile", { t: req.session.t, user: user, appliedProjects: appliedProjects });
+      } else {
+        console.log('No applied projects found.');
+        res.render("profile", { t: req.session.t, user: user, appliedProjects: [] }); // Send an empty array
+      }
+    } else {
+      res.redirect("/signup");
+    }
+  } catch (error) {
+    console.error('Error querying collection:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+
+
+
+
 
 app.get("/client", function (req, res) {
   if (req.session.t === 0 || (req.session.t === 2 && !req.session.client)) {

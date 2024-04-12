@@ -11,7 +11,7 @@ const applicationSchema = new mongoose.Schema({
     ref: "Student",
     required: true,
   },
-  description: String,
+  coverLetter: String,
   status: {
     type: String,
     enum: ["pending", "wip", "completed"],

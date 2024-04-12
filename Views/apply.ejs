@@ -1,0 +1,12 @@
+<%- include("partial/header") -%>
+<body>
+    <h1>Apply for Project</h1>
+    <form action="/apply/<%= project._id %>" method="POST">
+        <div>
+            <label for="coverLetter">Cover Letter:</label><br>
+            <textarea id="coverLetter" name="coverLetter" rows="5" cols="50"></textarea>
+        </div>
+        <button type="submit">Submit Application</button>
+    </form>
+</body>
+<%- include("partial/footer") -%>
