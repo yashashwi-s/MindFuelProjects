@@ -59,17 +59,15 @@ db.once("open", function () {
 
 module.exports = db;
 
-app.use(function(req, res, next) {
-  if(req.session.userId){
-    req.session.t=1;
+app.use(function (req, res, next) {
+  if (req.session.userId) {
+    req.session.t = 1;
     client = null;
-  }
-  else if(req.session.client){
-    req.session.t=2;
+  } else if (req.session.client) {
+    req.session.t = 2;
     client = req.session.client;
-  }
-  else{
-    req.session.t=0;
+  } else {
+    req.session.t = 0;
     client = null;
   }
   t = req.session.t;
@@ -100,6 +98,10 @@ app.get("/login", function (req, res) {
   res.render("login", { t: req.session.t });
 });
 
+app.get("/apply", function (req, res) {
+  res.render("apply", { t: req.session.t });
+});
+
 app.post("/applyToProject", async (req, res) => {
   try {
     const { projectID, studentID, description } = req.body;
@@ -117,38 +119,67 @@ app.post("/applyToProject", async (req, res) => {
   }
 });
 
-app.get("/addProject", function(req,res){
-  if(t===2 && client){
-    res.render("addProject", {t: req.session.t, client: req.session.client});
-  }
-  else{
+app.get("/addProject", function (req, res) {
+  if (t === 2 && client) {
+    res.render("addProject", { t: req.session.t, client: req.session.client });
+  } else {
     res.redirect("/client");
   }
 });
 
 app.post("/addProject", async (req, res) => {
   try {
-    console.log("Request Body:", req.body); 
-    const { industry, projectdetails, projectduration, skills, outcome, budget, timeline, comments } = req.body;
-    console.log("Received data:", { industry, projectdetails, projectduration, skills, outcome, budget, timeline, comments }); 
+    console.log("Request Body:", req.body);
+    const {
+      industry,
+      projectdetails,
+      projectduration,
+      skills,
+      outcome,
+      budget,
+      timeline,
+      comments,
+    } = req.body;
+    console.log("Received data:", {
+      industry,
+      projectdetails,
+      projectduration,
+      skills,
+      outcome,
+      budget,
+      timeline,
+      comments,
+    });
+    const client = await Client.findById(req.session.client);
+    const organization = client.organization;
     const project = new Project({
-      industry, projectdetails, projectduration, skills, outcome, budget, timeline, comments, company: req.session.client
-    }); 
-    console.log("New Project:", project); 
-    await project.save(); 
+      organization,
+      industry,
+      projectdetails,
+      projectduration,
+      skills,
+      outcome,
+      budget,
+      timeline,
+      comments,
+      company: req.session.client,
+    });
+    console.log("New Project:", project);
+    await project.save();
     console.log("Project saved successfully");
     res.redirect("/client");
   } catch (error) {
-    console.error("Error creating project:", error); 
+    console.error("Error creating project:", error);
     res.status(500).json({ error: "Failed to create project" });
   }
 });
 
-
 app.get("/projectApplications/:projectID", async (req, res) => {
   try {
     const { projectID } = req.params;
-    const applications = await Application.find({ project: projectID }).populate("student");
+    const applications = await Application.find({
+      project: projectID,
+    }).populate("student");
     res.render("projectApplications", { applications });
   } catch (error) {
     console.error(error);
@@ -157,7 +188,6 @@ app.get("/projectApplications/:projectID", async (req, res) => {
 });
 
 if (t === 0) {
-  
   app.post("/signup", async function (req, res) {
     const {
       name,
@@ -218,7 +248,7 @@ if (t === 0) {
       });
       await newStudent.save();
 
-      res.redirect("/login"); 
+      res.redirect("/login");
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Failed to create user" });
@@ -226,8 +256,17 @@ if (t === 0) {
   });
 }
 
+const getClientOrganization = (client) => {
+  if (client) {
+    return client.organization;
+  } else {
+    return "Client Not Found";
+  }
+};
+
+module.exports = getClientOrganization;
+
 app.post("/login", async function (req, res) {
-  
   const { loginUsername, loginPassword } = req.body;
 
   try {
@@ -264,27 +303,23 @@ app.get("/profile", function (req, res) {
   }
 });
 
-
 app.get("/client", function (req, res) {
   if (req.session.t === 0 || (req.session.t === 2 && !req.session.client)) {
     res.render("client", { t: req.session.t, error: null });
-  } else if(req.session.t === 1 || (req.session.t === 2 && !req.session.client)) {
+  } else if (
+    req.session.t === 1 ||
+    (req.session.t === 2 && !req.session.client)
+  ) {
     res.redirect("/");
-  } else{
+  } else {
     res.redirect("/profile1");
   }
- });
+});
 
 app.post("/client", async function (req, res) {
   if (req.session.t === 0) {
-    const {
-      organization,
-      contact,
-      email,
-      website,
-      password,
-      confirmPassword
-    } = req.body;
+    const { organization, contact, email, website, password, confirmPassword } =
+      req.body;
 
     try {
       const newClient = new Client({
@@ -292,12 +327,12 @@ app.post("/client", async function (req, res) {
         contact,
         email,
         website,
-        password
+        password,
       });
 
       await newClient.save();
       req.session.client = newClient;
-      req.session.t=2;
+      req.session.t = 2;
       console.log(req.session.t);
       res.redirect("/profile1");
     } catch (error) {
@@ -313,8 +348,12 @@ app.get("/profile1", async function (req, res) {
   try {
     if (req.session.t === 2 && req.session.client) {
       const client = req.session.client;
-      const projects = await Project.find({ company: req.session.client});
-      res.render("profile1", { t: req.session.t, client: client, projects: projects });
+      const projects = await Project.find({ company: req.session.client._id });
+      res.render("profile1", {
+        t: req.session.t,
+        client: client,
+        projects: projects,
+      });
     } else {
       res.redirect("/client");
     }
@@ -324,12 +363,16 @@ app.get("/profile1", async function (req, res) {
   }
 });
 
+app.get("/projects", async function (req, res) {
+  try {
+    const projects = await Project.find({}).populate("company");
+    res.render("projects", { t: req.session.t, projects: projects });
+  } catch (error) {
+    console.error("Error fetching projects:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
-
-app.get("/projects", async function(req,res){
-    const clients = await Client.find({});
-    res.render("projects", {t:req.session.t, clients: clients})
-})
 app.get("/sendEmail", function (req, res) {
   res.render("sendEmail", { t: req.session.t });
 });
@@ -344,9 +387,9 @@ app.get("/student", async function (req, res) {
   }
 });
 
-app.get("/chat/:userId", function(req, res) {
-    const userId = req.params.userId;
-    res.render("chatRoom", { t:req.session.t, userId: userId });
+app.get("/chat/:userId", function (req, res) {
+  const userId = req.params.userId;
+  res.render("chatRoom", { t: req.session.t, userId: userId });
 });
 
 app.listen(3000, function () {

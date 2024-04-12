@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const projectSchema = new mongoose.Schema({
+    organization: String,
     industry: String,
     projectdetails: String,
     projectduration: String,

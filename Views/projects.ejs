@@ -4,26 +4,23 @@
   <div class="container">
     <h1>All Projects</h1>
     <div class="client-list">
-      <% clients.forEach(client => { %>
+      <% projects.forEach(project => { %>
       <div class="client-card">
-        <h3><%= client.organization %></h3>
-        <p><strong>Contact:</strong> <%= client.contact %></p>
-        <p><strong>Email:</strong> <%= client.email %></p>
-        <p><strong>Website:</strong> <%= client.website %></p>
-        <p><strong>Industry:</strong> <%= client.industry %></p>
-        <p><strong>Project Details:</strong> <%= client.projectdetails %></p>
-        <p><strong>Project Duration:</strong> <%= client.projectduration %></p>
-        <% if (Array.isArray(client.skills)) { %>
-        <p><strong>Skills:</strong> <%= client.skills.join(', ') %></p>
+        <h3><%= project.organization  %></h3>
+        <p><strong>Industry:</strong> <%= project.industry %></p>
+        <p><strong>Project Details:</strong> <%= project.projectdetails %></p>
+        <p><strong>Project Duration:</strong> <%= project.projectduration %></p>
+        <% if (Array.isArray(project.skills)) { %>
+        <p><strong>Skills:</strong> <%= project.skills.join(', ') %></p>
         <% } else { %>
-        <p><strong>Skills:</strong> <%= client.skills %></p>
+        <p><strong>Skills:</strong> <%= project.skills %></p>
         <% } %>
-        <p><strong>Outcome:</strong> <%= client.outcome %></p>
-        <p><strong>Budget:</strong> <%= client.budget %></p>
-        <p><strong>Timeline:</strong> <%= client.timeline %></p>
-        <p><strong>Comments:</strong> <%= client.comments %></p>
+        <p><strong>Outcome:</strong> <%= project.outcome %></p>
+        <p><strong>Budget:</strong> <%= project.budget %></p>
+        <p><strong>Timeline:</strong> <%= project.timeline %></p>
+        <p><strong>Comments:</strong> <%= project.comments %></p>
         <div class="button-container">
-            <a href="/chat/<%= client._id %>" class="contact-button">Contact Now</a>
+            <a href="/chat/<%= project.client %>" class="contact-button">Apply Now</a>
         </div>       
       </div>
       <% }); %>
