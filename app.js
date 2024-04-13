@@ -299,16 +299,6 @@ app.get("/applicants/:projectId/:studentId", async (req, res) => {
   });
 
 
-const getClientOrganization = (client) => {
-  if (client) {
-    return client.organization;
-  } else {
-    return "Client Not Found";
-  }
-};
-
-module.exports = getClientOrganization;
-
 app.post("/login", async function (req, res) {
   const { loginUsername, loginPassword } = req.body;
 
@@ -352,10 +342,10 @@ app.get("/profile", async function (req, res) {
           appliedProjects.push(application.project.toObject());
         }
         console.log('Applied Projects:', appliedProjects);
-        res.render("profile", { t: req.session.t, user: user, appliedProjects: appliedProjects });
+        res.render("profile", { t: req.session.t, user: user, appliedProjects: appliedProjects, status: application.status });
       } else {
         console.log('No applied projects found.');
-        res.render("profile", { t: req.session.t, user: user, appliedProjects: [] }); // Send an empty array
+        res.render("profile", { t: req.session.t, user: user, appliedProjects: [], status: null }); 
       }
     } else {
       res.redirect("/signup");
@@ -365,9 +355,6 @@ app.get("/profile", async function (req, res) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
-
-
 
 
 

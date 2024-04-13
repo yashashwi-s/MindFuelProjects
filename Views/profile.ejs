@@ -31,7 +31,7 @@
     </div>
     <% } %> <!-- Close user-data div -->
 
-    <% if (appliedProjects) { %>
+    <% if (appliedProjects && appliedProjects.length > 0) { %>
     <div class="applied-projects">
       <h2>Applied Projects</h2>
       <% appliedProjects.forEach(project => { %>
@@ -44,6 +44,13 @@
         <p><strong>Budget:</strong> <%= project.budget %></p>
         <p><strong>Timeline:</strong> <%= project.timeline %></p>
         <p><strong>Comments:</strong> <%= project.comments %></p>
+        <% if (status === 'pending') { %>
+          <button class="btn btn-danger" disabled>Pending</button>
+          <% } else if (status === 'wip') { %>
+          <button class="btn btn-warning" disabled>Work in Progress</button>
+          <% } else if (status === 'completed') { %>
+          <button class="btn btn-success" disabled>Completed</button>
+          <% } %>
       </div>
       <% }) %> <!-- Close appliedProjects.forEach -->
     </div>
