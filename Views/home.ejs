@@ -1,33 +1,47 @@
 <%- include("partial/header") -%>
 
-<main>
-  <!-- Hero Section -->
   <section class="hero">
     <div class="container">
       <h1>MindFuel Projects</h1>
       <p class="headline">Where Ambitious Students Fuel Real-World Projects</p>
-      <div class="card-container">
-        <div class="card">
-          <img src="/images/student.png" class="card-img-top" alt="students">
-          <div class="card-body">
-            <h5 class="card-title">Students</h5>
-            <p class="card-text">Find internships & projects that propel your skillset.</p>
-            <a href="<%= t === 1 ? '/profile' : '/signup' %>" class="btn btn-primary"><%= t === 1 ? 'Profile' : 'Sign Up!' %></a>
-          </div>
-        </div>
-        <div class="card-space"></div>
-        <div class="card">
-          <img src="/images/client.png" class="card-img-top" alt="client">
-          <div class="card-body">
-            <h5 class="card-title">Clients</h5>
-            <p class="card-text">Tap into a driven student talent pool.</p>
-            <a href="/client" class="btn btn-primary">Get Started!</a>
-          </div>
-        </div>
-      </div>
-      
-    </div>
   </section>
+  
+  <div id="plans">
+    <div class="container" style="text-align: center;">
+            <div class="row">
+                <div class="log-in col-lg-6 col-md-12 "
+                    >
+                    <div class="student card" style="width:18rem; margin:auto;margin-top: 7%;">
+                        <div class="card-header">
+                            <img class="card-image" src="/images/student.png" alt="" style="border-radius: 2%;">
+                        </div>
+                        <div class="card-body">
+                            <h3 class="card-title">Student</h3>
+                            <p class="card-body"> Find internships & projects that propel your skillset.</p>
+                            <div class="d-grid gap-2">
+                                <a href="<%= t === 1 ? '/profile' : '/signup' %>" class="btn btn-primary"><%= t === 1 ? 'Profile' : 'Sign Up!' %></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="log-in col-lg-6 business-cards col-md-12" >
+                    <div class="client card" style="width: 18rem; margin:auto;margin-top: 7%;">
+                        <div class="card-header">
+                            <img class="card-image" src="/images/client.png" alt="" style="border-radius: 2%;">
+                        </div>
+                        <div class="card-body">
+                            <h3 class="card-title">Client</h3>
+                            <p class="card-body">Tap into a driven student talent pool.
+                            </p>
+                            <div class="d-grid gap-2">
+                                <a href="/client"><button class="btn btn-primary" type="button">Get Started!</button></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
 
   
 

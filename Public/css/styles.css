@@ -565,3 +565,153 @@ body {
   }
   
   
+  .header img
+  {
+      height: 100%;
+      width: 100%;
+      margin: 0%;
+      padding: 0%;
+  } 
+  .header
+  {
+      margin: 0%;
+      padding: 3% 10%;
+      background-image: url("/images/bg.jpg") ;
+      background-repeat: no-repeat;
+      background-size: cover;
+  }
+  .heading-box{
+     
+      text-align: center;
+      background-color: rgba(0, 0, 0, 0.4);
+      color: #fff;
+     
+  }
+  
+  .header-title-1
+  {
+      text-shadow: 4px 4px black;
+      padding-top: 20%;
+      padding-bottom: 10%;
+      font-family: "poppins";
+      font-weight: 900;
+      font-size:80px;
+      padding-left: 10%;
+      padding-right: 10%;
+      line-height: 72px;
+      text-align: left;
+  
+  }
+  .header-title-2
+  {
+      text-shadow: 3px 3px black;
+      padding-top: 0%;
+      padding-bottom: 45%;
+      font-family: "roboto";
+      font-weight: 700;
+      font-size:50px;
+      padding-left: 5%;
+      padding-right: 10%;
+      line-height: 65px;
+  }
+  .header-para
+  {
+      padding-top:40%;
+      padding-left: 10%;
+      padding-right: 10%;
+      font-size: 25px;
+      font-family: "roboto";
+      text-shadow: 2px 2px black;
+      line-height: 45px;
+      letter-spacing: 3px;
+  
+  }
+  .para-title
+  {
+      font-family: "alex brush";
+      font-size: 40px;
+  }
+  
+  /* objective section */
+  
+  #features
+  {
+      padding: 7.5% 7.5% 7.5% 7.5%;
+      text-align: center;background-color: white;  
+  }
+  
+  .icons
+  {
+      margin-top: 2rem;
+      margin-bottom: rem;
+      color: #015f56;
+  }
+  .feature1
+  {
+      padding-left: 7rem;
+      padding-right: 7rem;
+  }
+  .icon-heading
+  {
+      font-family: "poppins";
+      padding: 5%;
+      font-weight: 600;
+      letter-spacing: 1px;
+      font-size: 40px;
+  }
+  .icon-para
+  {
+      font-family: "roboto";
+      padding-left: 1%;
+      padding-right: 1%;
+      font-size: 17px;
+      letter-spacing: 1px;
+      color: rgb(137, 128, 128);
+  }
+  /* cards */
+  .individual{
+      max-width: 50%
+  }
+  .business{
+      max-width: 50%;
+  }
+  #plans{
+      text-align: center;
+      margin-top: 0%;
+      margin-bottom: 5%;
+      background-image: url("/images/bg-5.jpg");
+      padding-top: 5%;
+      padding-bottom: 5%;
+  }
+  .business-plans{
+      margin-left: 7.5%;
+  }
+  .card-header
+  {
+      padding: 0;
+  }
+  .card-image
+  {
+      width: 100%;
+      height: 15vw;
+      object-fit: cover;
+  }
+  .card-title
+  {
+      font-family: "poppins";
+      font-weight: 600;
+      font-size: 23px;
+      text-align: center;
+  }
+  .card-body
+  {
+      font-family: "roboto";
+      letter-spacing: 0.2px;
+  }
+  .plans-title
+  {
+      font-weight: 800;
+      font-size: 75px;
+      letter-spacing: 1px;
+      text-shadow: 4px 4px rgb(53, 51, 51);
+  }
