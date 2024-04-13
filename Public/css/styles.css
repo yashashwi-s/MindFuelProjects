@@ -427,5 +427,141 @@ p {
     background-color: #0056b3;
   }
 
+  /* Global styles */
+body {
+    font-family: 'Montserrat', sans-serif;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  /* Hero Section */
+  .hero {
+    background-image: url('path/to/hero-image.jpg');
+    background-size: cover;
+    color: #000000;
+    text-align: center;
+    padding: 100px 0;
+  }
+  
+  .hero h1 {
+    font-size: 48px;
+  }
+  
+  .headline {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .subheadline {
+    font-size: 18px;
+    margin-bottom: 40px;
+  }
+  
+  .cta-buttons {
+    margin-top: 20px;
+  }
+  
+  .primary-button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 15px 30px;
+    border-radius: 5px;
+    font-size: 18px;
+    text-decoration: none;
+  }
+  
+  .secondary-button {
+    background-color: #ff9900;
+    color: #fff;
+    padding: 15px 30px;
+    border-radius: 5px;
+    font-size: 18px;
+    text-decoration: none;
+  }
+  
+  .secondary-button:hover {
+    background-color: #ffcc66;
+  }
+  
+  /* Project Teaser Section */
+  .project-teaser {
+    background-color: #f8f9fa;
+    padding: 60px 0;
+  }
+  
+  .project-teaser h2 {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  /* Testimonial Section */
+  .testimonial {
+    background-color: #f8f9fa;
+    padding: 60px 0;
+  }
+  
+  .testimonial-content {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  .testimonial-content p {
+    font-size: 24px;
+  }
+  
+  /* Success Stories CTA */
+  .success-cta {
+    background-color: #f8f9fa;
+    padding: 60px 0;
+    text-align: center;
+  }
+  
+  .success-cta p {
+    font-size: 24px;
+  }
+
+  .button-spacing {
+    margin-right: 250px; /* Adjust the margin value as needed */
+  }
+  
+  .card-container {
+    display: flex; /* Display cards side by side */
+    justify-content: center; /* Center align cards horizontally */
+  }
+  
+  .card {
+    margin: 0 10px; /* Add margin between cards */
+    width: 18rem;
+    border: 1px solid #ccc; /* Add border for visual separation */
+  }
+  
+  .card-img-top {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .card-body {
+    text-align: center;
+  }
+  
+  .card-title {
+    font-size: 1.25rem; /* Increase font size for card title */
+  }
+  
+  .card-text {
+    font-size: 1rem; /* Adjust font size for card text */
+  }
+  
+  .btn-primary {
+    margin-top: 10px; /* Add margin to top of button */
+  }
+
+  .card-space {
+    margin-top: 240px; /* Adjust the value to increase or decrease spacing */
+  }
   
   
