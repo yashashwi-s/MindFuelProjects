@@ -29,12 +29,12 @@
       <p><strong>Past Projects:</strong> <%= user.pastProjects %></p>
       <% } %>
     </div>
-    <% } %> <!-- Close user-data div -->
+    <% } %> 
 
-    <% if (appliedProjects && appliedProjects.length > 0) { %>
+    <% if (appliedProjects.length > 0) { %>
     <div class="applied-projects">
       <h2>Applied Projects</h2>
-      <% appliedProjects.forEach(project => { %>
+      <% appliedProjects.forEach((project, index) => { %>
       <div class="project-card">
         <h3><%= project.organization %></h3>
         <p><strong>Industry:</strong> <%= project.industry %></p>
@@ -44,23 +44,24 @@
         <p><strong>Budget:</strong> <%= project.budget %></p>
         <p><strong>Timeline:</strong> <%= project.timeline %></p>
         <p><strong>Comments:</strong> <%= project.comments %></p>
+        <% let status = statuses[index]; %>
         <% if (status === 'pending') { %>
           <button class="btn btn-danger" disabled>Pending</button>
-          <% } else if (status === 'wip') { %>
+        <% } else if (status === 'wip') { %>
           <button class="btn btn-warning" disabled>Work in Progress</button>
-          <% } else if (status === 'completed') { %>
+        <% } else if (status === 'completed') { %>
           <button class="btn btn-success" disabled>Completed</button>
-          <% } %>
+        <% } %>
       </div>
-      <% }) %> <!-- Close appliedProjects.forEach -->
+      <% }) %>
     </div>
     <% } else { %>
-    <p>No applied projects found.</p>
-    <% } %> <!-- Close appliedProjects condition -->
+    <p>APPLY NOW!</p>
+    <% } %>
 
     <% if (!user && !appliedProjects) { %>
     <p>No user data found.</p>
-    <% } %> <!-- Close user and appliedProjects absence condition -->
+    <% } %>
   </div>
 </main>
 

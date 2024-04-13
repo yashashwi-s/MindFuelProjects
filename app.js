@@ -115,7 +115,6 @@ app.get("/apply/:projectID", async function (req, res) {
   }
 });
 
-
 app.post("/apply/:projectID", async (req, res) => {
   try {
     const { projectID } = req.params;
@@ -135,15 +134,12 @@ app.post("/apply/:projectID", async (req, res) => {
     });
 
     await application.save();
-    
-    res.status(201).json({ message: "Application submitted successfully" });
+    res.redirect("/profile");
   } catch (error) {
     console.error("Error submitting application:", error);
     res.status(500).json({ error: "Failed to submit application" });
   }
 });
-
-
 
 app.get("/addProject", function (req, res) {
   if (t === 2 && client) {
@@ -231,8 +227,28 @@ app.get("/applicants/:projectId/:studentId", async (req, res) => {
 });
 
 
-  app.post("/signup", async function (req, res) {
-    const {
+app.post("/signup", async function (req, res) {
+  const {
+    name,
+    mobno,
+    username,
+    email,
+    gender,
+    school,
+    course,
+    degree,
+    passout,
+    currentYear,
+    linkedProfile,
+    github,
+    skills,
+    pastProjects,
+    password,
+    confirmPassword,
+  } = req.body;
+  if (password !== confirmPassword) {
+    return res.render("signup", {
+      error: "Passwords do not match",
       name,
       mobno,
       username,
@@ -247,57 +263,36 @@ app.get("/applicants/:projectId/:studentId", async (req, res) => {
       github,
       skills,
       pastProjects,
-      password,
-      confirmPassword,
-    } = req.body;
-    if (password !== confirmPassword) {
-      return res.render("signup", {
-        error: "Passwords do not match",
-        name,
-        mobno,
-        username,
-        email,
-        gender,
-        school,
-        course,
-        degree,
-        passout,
-        currentYear,
-        linkedProfile,
-        github,
-        skills,
-        pastProjects,
-      });
-    }
+    });
+  }
 
-    try {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const newStudent = new Student({
-        name,
-        mobno,
-        username,
-        email,
-        gender,
-        school,
-        course,
-        degree,
-        passout,
-        currentYear,
-        linkedProfile,
-        github,
-        skills,
-        pastProjects,
-        password: hashedPassword,
-      });
-      await newStudent.save();
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newStudent = new Student({
+      name,
+      mobno,
+      username,
+      email,
+      gender,
+      school,
+      course,
+      degree,
+      passout,
+      currentYear,
+      linkedProfile,
+      github,
+      skills,
+      pastProjects,
+      password: hashedPassword,
+    });
+    await newStudent.save();
 
-      res.redirect("/login");
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Failed to create user" });
-    }
-  });
-
+    res.redirect("/login");
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to create user" });
+  }
+});
 
 app.post("/login", async function (req, res) {
   const { loginUsername, loginPassword } = req.body;
@@ -332,21 +327,16 @@ app.get("/profile", async function (req, res) {
   try {
     if (req.session.t === 1 && req.session.user) {
       const user = req.session.user;
-      const application = await Application.findOne({ student: user._id }).populate('project');
+      const applications = await Application.find({ student: user._id }).populate('project');
       
-      if (application && application.project) {
-        let appliedProjects = [];
-        if (Array.isArray(application.project)) {
-          appliedProjects = application.project.map(project => project.toObject());
-        } else {
-          appliedProjects.push(application.project.toObject());
-        }
-        console.log('Applied Projects:', appliedProjects);
-        res.render("profile", { t: req.session.t, user: user, appliedProjects: appliedProjects, status: application.status });
-      } else {
-        console.log('No applied projects found.');
-        res.render("profile", { t: req.session.t, user: user, appliedProjects: [], status: null }); 
+      let appliedProjects = [];
+      let statuses = [];
+      if (applications && applications.length > 0) {
+        appliedProjects = applications.map(application => application.project.toObject());
+        statuses = applications.map(application => application.status);
       }
+
+      res.render("profile", { t: req.session.t, user: user, appliedProjects: appliedProjects, statuses: statuses });
     } else {
       res.redirect("/signup");
     }
@@ -355,7 +345,6 @@ app.get("/profile", async function (req, res) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
 
 
 app.get("/client", function (req, res) {
