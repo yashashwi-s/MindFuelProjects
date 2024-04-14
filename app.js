@@ -233,7 +233,6 @@ app.put('/updateStatus/:id', async (req, res) => {
   }
 });
 
-
 app.get("/applicants/:projectId/:studentId", async (req, res) => {
   try {
     const { studentId } = req.params;

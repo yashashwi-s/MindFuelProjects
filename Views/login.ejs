@@ -1,4 +1,22 @@
 <%-include("partial/header") -%>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+  const passwordInput = document.getElementById('loginPassword');
+  const viewPasswordBtn = document.getElementById('viewPasswordBtn');
+
+  viewPasswordBtn.addEventListener('click', function() {
+    if (passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+      viewPasswordBtn.innerHTML = '<i class="fas fa-eye-slash"></i>';
+    } else {
+      passwordInput.type = 'password';
+      viewPasswordBtn.innerHTML = '<i class="fas fa-eye"></i>';
+    }
+  });
+});
+</script>
+
 <div class="imagebg">
   <center><h1><strong>Login</strong></h1></center>
   <div class="signup">
@@ -15,14 +33,20 @@
       </div>
       <div class="mb-3">
         <label for="password" class="form-label sign-up-label">Password</label>
-        <input
-          type="password"
-          class="form-control"
-          id="loginPassword"
-          name="loginPassword"
-          required
-        />
+        <div class="input-group">
+          <input
+            type="password"
+            class="form-control"
+            id="loginPassword"
+            name="loginPassword"
+            required
+          />
+          <button class="btn btn-outline-secondary" type="button" id="viewPasswordBtn">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
       </div>
+      
       <div class="d-grid gap-2">
         <button type="submit" class="btn btn-success">Log In</button>
       </div>
