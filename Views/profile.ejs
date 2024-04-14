@@ -33,7 +33,7 @@
 
     <% if (appliedProjects.length > 0) { %>
     <div class="applied-projects">
-      <h2>Applied Projects</h2>
+      <center><h2><strong>Applied Projects</strong></h2></center>
       <% appliedProjects.forEach((project, index) => { %>
       <div class="project-card">
         <h3><%= project.organization %></h3>
@@ -50,7 +50,7 @@
         <% } else if (status === 'wip') { %>
           <button class="btn btn-warning" disabled>Work in Progress</button>
         <% } else if (status === 'completed') { %>
-          <button class="btn btn-success" disabled>Completed</button>
+          <button class="btn btn-primary change-status-btn" disabled>Completed</button>
         <% } %>
       </div>
       <% }) %>

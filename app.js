@@ -209,6 +209,22 @@ app.get("/applications/:projectID", async (req, res) => {
   }
 });
 
+app.put('/updateStatus/:id', async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  try {
+    const updatedApplication = await Application.findByIdAndUpdate(id, { status }, { new: true });
+    if (!updatedApplication) {
+      return res.status(404).json({ error: 'Application not found' });
+    }
+    res.status(200).json(updatedApplication);
+  } catch (error) {
+    console.error('Error updating status:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 app.get("/applicants/:projectId/:studentId", async (req, res) => {
   try {
     const { studentId } = req.params;
@@ -424,7 +440,11 @@ app.get("/sendEmail", function (req, res) {
 app.get("/student", async function (req, res) {
   try {
     const users = await Student.find({});
-    res.render("student", { t: req.session.t, users: users });
+    if(req.session.t===2){
+    res.render("student", { t: req.session.t, users: users });}
+    else{
+      res.redirect("profile");
+    }
   } catch (error) {
     console.error("Error fetching users:", error);
     res.status(500).json({ error: "Internal Server Error" });

@@ -82,17 +82,44 @@
     </nav>
   </body>
 </html>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const acceptButtons = document.querySelectorAll('.change-status-btn');
 
+    acceptButtons.forEach(function(button) {
+      button.addEventListener('click', function() {
+        const applicationId = button.dataset.applicationId;
+        const xhr = new XMLHttpRequest();
+        let newStatus;
+        if (button.innerText === "Completed?") {
+          newStatus = "completed";
+        } else {
+          newStatus = "wip";
+        }
+        xhr.open('PUT', `/updateStatus/${applicationId}`, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+              console.log('Status updated successfully');
+              button.disabled = true;
+              window.location.reload();
+            } else {
+              console.error('Error updating status:', xhr.responseText);
+            }
+          }
+        };
+        xhr.send(JSON.stringify({ status: newStatus }));
+      });
+    });
+  });
+</script>
 
 <main>
   <div class="container">
     <h1>Applicant Details</h1>
-    <div class="card mb-3">
+    <div class="card col-lg-6" style="display: inline;">
       <div class="card-body">
-        <% if (applications.coverLetter) { %>
-          <h6>Cover Letter:</h6>
-          <p><%= applications.coverLetter %></p>
-        <% } %>
         <h5 class="card-title"><%= student.name %></h5>
         <p class="card-text"><strong>Email:</strong> <%= student.email %></p>
         <p class="card-text"><strong>Mobile Number:</strong> <%= student.mobno %></p>
@@ -107,11 +134,27 @@
         <p class="card-text"><strong>GitHub Profile:</strong> <%= student.github %></p>
         <p class="card-text"><strong>Skills:</strong> <%= student.skills.join(", ") %></p>
         <p class="card-text"><strong>Past Projects:</strong> <%= student.pastProjects.join(", ") %></p>
-        <p class="card-text"><strong>Country:</strong> <%= student.country %></p>
+        
+        <% const application = applications[applications.length-1] %>
+          <h6>Cover Letter:</h6>
+          <p><%= application.coverLetter %></p>
+          <% if (application.status === 'pending') { %>
+            <button type="button" class="btn btn-primary change-status-btn" data-application-id="<%= application._id %>">Accept</button>
+          <% } %>
+          <% if (application.status === "wip"){%>
+            <button type="button" class="btn btn-primary change-status-btn" disabled>Accepted. Work In Progress.</button>
+        <%}%>
+        <% if (application.status === 'wip') { %>
+          <button type="button" class="btn btn-primary change-status-btn" data-application-id="<%= application._id %>">Completed?</button>
+        <% } %>
+        <% if (application.status === "completed"){%>
+          <button type="button" class="btn btn-primary change-status-btn" disabled>Completed</button>
+      <%}%>
       </div>
     </div>
   </div>
 </main>
+
 
 <div class="footer-padding"></div>
 <hr style="border-style: solid none none; width: 90%; text-align: center; margin: auto; margin-top: 2%; height: 0px; border-color: black; border-width: 2px; color: black;">
