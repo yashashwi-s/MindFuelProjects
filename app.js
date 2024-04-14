@@ -185,6 +185,7 @@ app.post("/addProject", async (req, res) => {
       timeline,
       comments,
       company: req.session.client,
+      status: "Open"
     });
     console.log("New Project:", project);
     await project.save();
@@ -218,12 +219,20 @@ app.put('/updateStatus/:id', async (req, res) => {
     if (!updatedApplication) {
       return res.status(404).json({ error: 'Application not found' });
     }
+    if (status === "wip" || status === "completed") {
+      const projectId = updatedApplication.project;
+      const updatedProject = await Project.findByIdAndUpdate(projectId, { status: 'closed' }, { new: true });
+      if (!updatedProject) {
+        console.error('Project not found');
+      }
+    }
     res.status(200).json(updatedApplication);
   } catch (error) {
     console.error('Error updating status:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 app.get("/applicants/:projectId/:studentId", async (req, res) => {
   try {
@@ -241,7 +250,6 @@ app.get("/applicants/:projectId/:studentId", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch applicant details" });
   }
 });
-
 
 app.post("/signup", async function (req, res) {
   const {
@@ -361,7 +369,6 @@ app.get("/profile", async function (req, res) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
 
 app.get("/client", function (req, res) {
   if (req.session.t === 0 || (req.session.t === 2 && !req.session.client)) {

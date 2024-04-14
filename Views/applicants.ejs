@@ -84,35 +84,36 @@
 </html>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    const acceptButtons = document.querySelectorAll('.change-status-btn');
+  const acceptButtons = document.querySelectorAll('.change-status-btn');
 
-    acceptButtons.forEach(function(button) {
-      button.addEventListener('click', function() {
-        const applicationId = button.dataset.applicationId;
-        const xhr = new XMLHttpRequest();
-        let newStatus;
-        if (button.innerText === "Completed?") {
-          newStatus = "completed";
-        } else {
-          newStatus = "wip";
-        }
-        xhr.open('PUT', `/updateStatus/${applicationId}`, true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.onreadystatechange = function() {
-          if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-              console.log('Status updated successfully');
-              button.disabled = true;
-              window.location.reload();
-            } else {
-              console.error('Error updating status:', xhr.responseText);
-            }
+  acceptButtons.forEach(function(button) {
+    button.addEventListener('click', function() {
+      const applicationId = button.dataset.applicationId;
+      const xhr = new XMLHttpRequest();
+      let newStatus;
+      if (button.innerText === "Completed?") {
+        newStatus = "completed";
+      } else {
+        newStatus = "wip";
+      }
+      xhr.open('PUT', `/updateStatus/${applicationId}`, true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          if (xhr.status === 200) {
+            console.log('Status updated successfully');
+            button.disabled = true;
+            window.location.reload(); // Reload the page after updating status
+          } else {
+            console.error('Error updating status:', xhr.responseText);
           }
-        };
-        xhr.send(JSON.stringify({ status: newStatus }));
-      });
+        }
+      };
+      xhr.send(JSON.stringify({ status: newStatus }));
     });
   });
+});
+
 </script>
 
 <main>

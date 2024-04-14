@@ -10,7 +10,8 @@ const projectSchema = new mongoose.Schema({
     budget: String,
     timeline: String,
     comments: String,
-    company: String
+    company: String,
+    status: String
 });
 
 const Project = mongoose.model("Project", projectSchema);

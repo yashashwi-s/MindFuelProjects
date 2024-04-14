@@ -20,7 +20,10 @@
         <p><strong>Timeline:</strong> <%= project.timeline %></p>
         <p><strong>Comments:</strong> <%= project.comments %></p>
         <div class="button-container">
-            <a href="/apply/<%= project._id %>" class="contact-button">Apply Now</a>
+          <%if(project.status === "Open") {%>
+          <a href="/apply/<%= project._id %>" class="contact-button">Apply Now</a>
+          <% } else if(project.status === "closed") {%>
+          <button type="button" class="btn btn-primary change-status-btn" disabled>Closed</button><%}%>
         </div>       
       </div>
       <% }); %>
