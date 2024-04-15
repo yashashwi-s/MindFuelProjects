@@ -2,7 +2,7 @@
 https://mindfuelprojects.onrender.com
 
 ## Team:
-Yashashwi
+MindBusters
 
 ## Description:
 This is a two interface platform. Students can register, view their applications and apply for an openproject. Clients can register themselves, upload projects, view applications of students that viewed the project and accept it and mark them completed closing the project on the main paroject page.
