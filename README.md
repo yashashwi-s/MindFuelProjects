@@ -13,7 +13,7 @@ This is a two interface platform. Students can register, view their applications
    First, you need to clone the repository to your local machine. Open your terminal or command prompt and run the following command:
 
 ######
-    git clone https://github.com/yashashwi-s/NetZero.git
+    git clone https://github.com/yashashwi-s/MindFuelPorjects.git
 
 2. **Navigate to the Repository Folder:**  
 Change your directory to the cloned repository:
