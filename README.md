@@ -19,7 +19,7 @@ This is a two interface platform. Students can register, view their applications
 Change your directory to the cloned repository:
 
 ######
-    cd NetZero
+    cd MindFuelProjects
 
 3. **Install Dependencies:**  
 Install project dependencies by running:
