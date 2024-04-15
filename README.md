@@ -4,6 +4,10 @@ https://mindfuelprojects.onrender.com
 ## Team:
 MindBusters
 
+## Demo:
+
+https://github.com/yashashwi-s/MindFuelProjects/assets/155887129/e44572c7-fad5-4b70-98f9-ae85dd2d2b92
+
 ## Description:
 This is a two interface platform. Students can register, view their applications and apply for an openproject. Clients can register themselves, upload projects, view applications of students that viewed the project and accept it and mark them completed closing the project on the main paroject page.
 
